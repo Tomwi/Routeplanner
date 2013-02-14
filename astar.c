@@ -74,6 +74,8 @@ int reverseDirection(int direction) {
         case EAST: return WEST;
         case WEST: return EAST;
     }
+    
+    return 0;
 }
 
 /**
@@ -132,6 +134,8 @@ int determineStepWeight(int destination_location, int parent_location) {
             else return STEP_WEIGHT;
             break;
     }
+    
+    return 0;
 }
 
 /**
@@ -146,12 +150,15 @@ int determineStepWeight(int destination_location, int parent_location) {
  */
 
 Path_element* findShortestPath(int start_x, int start_y, int facing_direction, int destination_x, int destination_y) {
-    // Clears the grid cache to prevent incorrect results
-    clearGridCache();
-
     // Initiate the node element, the start and destination and the path
     Node *node = malloc(sizeof (Node)), *start = malloc(sizeof (Node)), *destination = malloc(sizeof (Node));
     Path_element *path = NULL;
+    
+    // Find initial 'parent location'
+    int parent_location = reverseDirection(facing_direction);
+    
+    // Clears the grid cache to prevent incorrect results
+    clearGridCache();
 
     // Link start and destination to the grid consequently
     start = grid[start_x][start_y];
@@ -159,9 +166,6 @@ Path_element* findShortestPath(int start_x, int start_y, int facing_direction, i
 
     // Add start to open list
     addToList(&list_open, start);
-
-    // Find initial 'parent location'
-    int parent_location = reverseDirection(facing_direction);
 
     do {
         // Find the node with the best score in the open list
@@ -316,10 +320,11 @@ void generateGrid() {
     for (x = 0; x < GRID_SIZE_X; x++) {
         for (y = 0; y < GRID_SIZE_Y; y++) {
             // Initialize node
+            Node *node;
             grid[x][y] = malloc(sizeof (Node));
 
             // Assign NULL values to neighbours for now to prevent NULL pointers
-            Node *node = grid[x][y];
+            node = grid[x][y];
             node->east = NULL;
             node->west = NULL;
             node->south = NULL;
@@ -373,6 +378,8 @@ void removeFromGrid(int x, int y) {
  */
 
 void printGrid(Path_element* robot_path) {
+    int x, y;
+    
     // Check if the path isn't NULL
     if (robot_path) {
         // Mark the start
@@ -391,12 +398,10 @@ void printGrid(Path_element* robot_path) {
         grid[robot_path->x][robot_path->y]->mark = 'R';
     }
 
-    int x, y;
-
     // Loop through rows
     for (y = GRID_SIZE_Y - 1; y >= 0; y--) {
         // Display grid y
-        printf("%5-d", y);
+        printf("%5d", y);
 
         // Loop through columns
         for (x = 0; x < GRID_SIZE_X; x++) {
@@ -440,7 +445,7 @@ void printGrid(Path_element* robot_path) {
     
     // Display grid x
     for (x = 0; x < GRID_SIZE_X; x++) {
-        printf("%6-d", x);
+        printf("%6d", x);
     }
     
     printf("\n");

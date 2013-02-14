@@ -24,9 +24,20 @@ void cls() {
 }
 
 int main() {
+    // Initializations
+    Position start, destination;
+    int initial_facing_direction;
+    Path_element *path;
+    int path_weight = 0, step_weight;
+    int x, y;
+    Path_element *robot_path;
+    
     // Seed the rand() function
     srand(time(NULL));
-
+    
+    // Randomize facing direction
+    initial_facing_direction = rand() % 4 + 1;    
+    
     // Initialize grid
     generateGrid();
     removeConnection(1, 1, 1, 2);
@@ -40,9 +51,6 @@ int main() {
     removeConnection(4, 1, 4, 2);
     removeConnection(1, 0, 1, 1);
     removeConnection(2, 1, 3, 1);
-
-    // Start values
-    Position start, destination;
     
     // Randomize the start position
     start.x = destination.x = rand() % 5;
@@ -53,12 +61,9 @@ int main() {
         destination.x = rand() % 5;
         destination.y = rand() % 5;
     }
-    
-    // Randomize the initial facing direction
-    int initial_facing_direction = rand() % 4 + 1;
 
     // Create the robot_path linked list
-    Path_element *robot_path = malloc(sizeof (Path_element));
+    robot_path = malloc(sizeof (Path_element));
     robot_path->x = start.x;
     robot_path->y = start.y;
     robot_path->facing_direction = initial_facing_direction;
@@ -68,18 +73,16 @@ int main() {
     grid[destination.x][destination.y]->mark = 'G';
 
     // Find initial path
-    Path_element *path = findShortestPath(start.x, start.y, initial_facing_direction, destination.x, destination.y);
+    path = findShortestPath(start.x, start.y, initial_facing_direction, destination.x, destination.y);
 
-    int x = start.x;
-    int y = start.y;
+    // Record start
+    x = start.x;
+    y = start.y;
 
     // Display first move
     cls();
     printGrid(robot_path);
     sleep(1);
-
-    // Initiate necessary variables
-    int path_weight = 0, step_weight;
 
     // Move while not on destination
     while (x != destination.x || y != destination.y) {

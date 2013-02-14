@@ -21,6 +21,8 @@
 #define WEST 4
 #define EAST 2
 
+struct Path_element;
+
 struct Position {
     unsigned int x, y;
 };
