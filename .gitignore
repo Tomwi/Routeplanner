@@ -1,3 +1,10 @@
+# Custom
+
+.dep.inc
+a-star.exe.stackdump
+nbproject/*
+routeplanner.exe.stackdump
+
 #################
 ## Eclipse
 #################
