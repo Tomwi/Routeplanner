@@ -2,7 +2,6 @@
  * File:   main.c
  * Author: Wessel Bruinsma
  *
- * Created on February 13, 2013, 2:34 PM
  */
 
 #include <stdio.h>
