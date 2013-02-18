@@ -61,24 +61,6 @@ void processNeighbour(Node *node, Node *parent, int step_weight, Position destin
 }
 
 /**
- * Reverses the given direction.
- * @param direction <int> direction to reverse
- * @return <int> reversed direction
- */
-
-int reverseDirection(int direction) {
-    // Reverse direction
-    switch (direction) {
-        case NORTH: return SOUTH;
-        case SOUTH: return NORTH;
-        case EAST: return WEST;
-        case WEST: return EAST;
-    }
-    
-    return 0;
-}
-
-/**
  * Gets in which direction the parent of the node is located.
  * @param node <Node*> node
  * @return <int> parent's direction
@@ -100,41 +82,6 @@ int getParentLocation(Node *node) {
         }
     }
 
-    return 0;
-}
-
-/**
- * Determines the step weight based on the location of the parent and destination.
- * @param destination_location <int> destination's location
- * @param parent_location <int> parent's location
- * @return <int> step weight
- */
-
-int determineStepWeight(int destination_location, int parent_location) {
-    // Determine the step weight by checking if the directions are perpendicular or reversed.
-    switch (destination_location) {
-        case SOUTH:
-            if (parent_location == EAST || parent_location == WEST) return STEP_WEIGHT + TURNING_WEIGHT;
-            else if (parent_location == SOUTH) return STEP_WEIGHT + 2 * TURNING_WEIGHT;
-            else return STEP_WEIGHT;
-            break;
-        case EAST:
-            if (parent_location == NORTH || parent_location == SOUTH) return STEP_WEIGHT + TURNING_WEIGHT;
-            else if (parent_location == EAST) return STEP_WEIGHT + 2 * TURNING_WEIGHT;
-            else return STEP_WEIGHT;
-            break;
-        case NORTH:
-            if (parent_location == EAST || parent_location == WEST) return STEP_WEIGHT + TURNING_WEIGHT;
-            else if (parent_location == NORTH) return STEP_WEIGHT + 2 * TURNING_WEIGHT;
-            else return STEP_WEIGHT;
-            break;
-        case WEST:
-            if (parent_location == NORTH || parent_location == SOUTH) return STEP_WEIGHT + TURNING_WEIGHT;
-            else if (parent_location == SOUTH) return STEP_WEIGHT + 2 * TURNING_WEIGHT;
-            else return STEP_WEIGHT;
-            break;
-    }
-    
     return 0;
 }
 

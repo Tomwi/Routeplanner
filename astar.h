@@ -21,6 +21,9 @@
 #define WEST 4
 #define EAST 2
 
+#define reverseDirection(direction) (direction==NORTH||direction==SOUTH?(direction==NORTH?SOUTH:NORTH):(direction==WEST?EAST:WEST))
+#define determineStepWeight(direction,parent_location) (STEP_WEIGHT+TURNING_WEIGHT*(reverseDirection(direction)==parent_location?0:(direction==reverseDirection(direction)?2:1)))
+
 struct Path_element;
 
 struct Position {
