@@ -15,6 +15,7 @@
 
 #define TURNING_WEIGHT 2 // Penalty for turning 90 degrees
 #define STEP_WEIGHT 10
+#define BACKWARDS_DRIVING 0
 
 #define NORTH 1
 #define SOUTH 3
@@ -22,7 +23,11 @@
 #define EAST 2
 
 #define reverseDirection(direction) (direction==NORTH||direction==SOUTH?(direction==NORTH?SOUTH:NORTH):(direction==WEST?EAST:WEST))
-#define determineStepWeight(direction,parent_location) (STEP_WEIGHT+TURNING_WEIGHT*(reverseDirection(direction)==parent_location?0:(direction==reverseDirection(direction)?2:1)))
+#define determineStepWeight(direction,parent_location) \
+(STEP_WEIGHT +  \
+        (reverseDirection(direction) == parent_location ? 0 : \
+                (direction == parent_location ? 2 * TURNING_WEIGHT * !BACKWARDS_DRIVING : TURNING_WEIGHT) \
+        ))
 
 struct Path_element;
 
@@ -44,12 +49,14 @@ struct Node {
 typedef struct Node Node;
 typedef struct Position Position;
 
+void swap(int*, int*);
 void generateGrid(void);
 void printGrid(struct Path_element*);
 void processNeighbour(Node*, Node*, int, Position);
 struct Path_element* findShortestPath(int, int, int, int, int);
 void removeFromGrid(int, int);
 int checkConnection(int, int, int, int);
+int mineAtConnection(int, int, int, int);
 void removeConnection(int, int, int, int);
 void clearGridCache(void);
 

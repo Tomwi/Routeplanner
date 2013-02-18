@@ -9,19 +9,6 @@ Node *grid[GRID_SIZE_X][GRID_SIZE_Y];
 List_element *list_closed = NULL, *list_open = NULL;
 
 /**
- * Swaps the value of two integers.
- * @param a <int> first value
- * @param b <int> second value
- */
-
-void swap(int *a, int *b) {
-    // Swap variables
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-/**
  * Processes a node in the a* algorithm.
  * @param node <Node*> node to process
  * @param parent <Node*> parent of the node
@@ -68,7 +55,7 @@ void processNeighbour(Node *node, Node *parent, int step_weight, Position destin
 
 int getParentLocation(Node *node) {
     // Test if the parent exists
-    if (node->parent) {
+    if (node && node->parent) {
         
         // Find location by comparing neighbours
         if (node->east == node->parent) {
@@ -175,7 +162,15 @@ Path_element* findShortestPath(int start_x, int start_y, int facing_direction, i
 
 int checkConnection(int x1, int y1, int x2, int y2) {
     // Check if both nodes exist
-    if (grid[x1][y1] && grid[x2][y2]) {
+    if (grid[x1][y1] && grid[x2][y2] &&
+            x1 >= 0 &&
+            x1 < GRID_SIZE_X &&
+            y1 >= 0 &&
+            y1 < GRID_SIZE_Y &&
+            x2 >= 0 &&
+            x2 < GRID_SIZE_X &&
+            y2 >= 0 &&
+            y2 < GRID_SIZE_Y) {
         // Arrange the coordinate pairs for easier checking, otherwise swap coordinates
         if (y1 == y2 && x2 - x1 == -1) {
             swap(&x1, &x2);
@@ -197,6 +192,8 @@ int checkConnection(int x1, int y1, int x2, int y2) {
                 ) {
             return 1;
         }
+    } else {
+        //printf("SHOULD ERROR!!!!!!!!!");
     }
 
     // No return value already return, so no connection found
@@ -348,7 +345,7 @@ void printGrid(Path_element* robot_path) {
     // Loop through rows
     for (y = GRID_SIZE_Y - 1; y >= 0; y--) {
         // Display grid y
-        printf("%5d", y);
+        printf(" %d   ", y);
 
         // Loop through columns
         for (x = 0; x < GRID_SIZE_X; x++) {
@@ -362,7 +359,9 @@ void printGrid(Path_element* robot_path) {
             }
             
             // Display connection between horizontal nodes
-            if (checkConnection(x, y, x + 1, y)) {
+            if (mineAtConnection(x, y, x + 1, y)) {
+                printf(" m ");
+            } else if (checkConnection(x, y, x + 1, y)) {
                 printf(" - ");
             } else {
                 printf("   ");
@@ -375,7 +374,9 @@ void printGrid(Path_element* robot_path) {
         // Loop through columns again
         for (x = 0; x < GRID_SIZE_X; x++) {
             // Display vertical connection
-            if (checkConnection(x, y, x, y - 1)) {
+            if (mineAtConnection(x, y, x, y - 1)) {
+                printf(" m ");
+            } else if (checkConnection(x, y, x, y - 1)) {
                 printf(" | ");
             } else {
                 printf("   ");
@@ -388,7 +389,7 @@ void printGrid(Path_element* robot_path) {
         printf("\n");
     }
     
-    printf("      ");
+    printf(" ");
     
     // Display grid x
     for (x = 0; x < GRID_SIZE_X; x++) {
