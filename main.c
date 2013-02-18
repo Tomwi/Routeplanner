@@ -8,12 +8,18 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <time.h>
+#include <math.h>
 
 #include "astar.h"
 #include "list.h"
 #include "path.h"
 
 #define NUMBER_OF_MINES 13
+#define VISUAL 1
+
+#if VISUAL == 1
+#define SINGLE_RUN
+#endif
 
 extern Node *grid[GRID_SIZE_X][GRID_SIZE_Y];
 int mine_locations[NUMBER_OF_MINES][4];
@@ -201,12 +207,17 @@ int main() {
     path = findShortestPath(start.x, start.y, initial_facing_direction, destination.x, destination.y);
 
     if (!path) {
+#ifdef SINGLE_RUN
         cls();
         printGrid(robot_path);
         printf("\nCouldn't find a path...\n");
         sleep(2);
         main();
         return 0;
+#else
+        main();
+        return EXIT_SUCCESS;
+#endif
     }
 
     // Record start
@@ -214,9 +225,11 @@ int main() {
     y = start.y;
 
     // Display first move
+#ifdef SINGLE_RUN
     cls();
     printGrid(robot_path);
     sleep(1);
+#endif
 
     // Move while not on destination
     while (1) {
@@ -238,21 +251,28 @@ int main() {
             path = findShortestPath(x, y, path->facing_direction, destination.x, destination.y);
 
             if (!path) {
+#ifdef SINGLE_RUN
                 cls();
                 printGrid(robot_path);
                 printf("\nCouldn't find a path...\n");
                 sleep(2);
                 main();
                 return 0;
+#else
+                main();
+                return EXIT_SUCCESS;
+#endif
             }
         }
 
         // Display path and add step weight to path weight
+        path_weight += step_weight;
+#ifdef SINGLE_RUN
         cls();
         printGrid(robot_path);
-        path_weight += step_weight;
         printf("\nCurrent step weight: %03d\nTotal path weight: %03d\n", step_weight, path_weight);
         sleep(1);
+#endif
     }
     
     // Reveal mines
@@ -270,11 +290,16 @@ int main() {
     
 
     // Display final screen
+#ifdef SINGLE_RUN
     cls();
     printGrid(robot_path);
-    printf("\nCurrent step weight: %03d\nFinal path weight: %03d\nShortest path weight: %03d\nEfficiency: %02d%%\n", step_weight, path_weight, shortest_path_weight, 100*shortest_path_weight/path_weight);
+    printf("\nCurrent step weight: %03d\nFinal path weight: %03d\nShortest path weight: %03d\nEfficiency: %0.2lf%%\n", step_weight, path_weight, shortest_path_weight, round((float)100*shortest_path_weight/path_weight));
     sleep(3);
     main();
+#else
+    cls();
+    printf("%.5lf\n", (float)100*shortest_path_weight/path_weight);
+#endif
     return EXIT_SUCCESS;
 }
 
