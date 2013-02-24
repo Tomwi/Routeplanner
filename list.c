@@ -2,7 +2,6 @@
 #include <stdlib.h>
 
 #include "astar.h"
-#include "grid.h"
 #include "list.h"
 
 /**
