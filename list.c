@@ -49,7 +49,7 @@ void removeFromList(List_element **list, Node *node) {
         return;
     }
 
-    // The given node is not the first element, copy the list for easier coding
+    // The given node is not the first element, copy the list for easier coding and not modifying the original list given to the function
     list_copy = (*list)->next;
 
     // While list_copy is a valid element
@@ -114,6 +114,7 @@ int inList(List_element *list, Node *node) {
         list = list->next;
     }
 
+    // Nothing returned before, so nothing found, so return 0
     return 0;
 }
 

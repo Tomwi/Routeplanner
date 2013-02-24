@@ -19,7 +19,7 @@ void addToEndOfPath(Path_element** path, int x, int y) {
     // If linked list is NULL, just assign the element
     if (!*path) { *path = element; return; }
     
-    // Loop through the list
+    // Loop through a copy of the path, not modifying the original path giving to the function, as this would result in a one-time use
     path_copy = *path;
     while (path_copy->next) path_copy = path_copy->next;
     

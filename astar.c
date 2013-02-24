@@ -5,6 +5,7 @@
 #include "list.h"
 #include "path.h"
 
+// Defining global variables
 Node *grid[GRID_SIZE_X][GRID_SIZE_Y];
 List_element *list_closed = NULL, *list_open = NULL;
 
@@ -58,17 +59,13 @@ int getParentLocation(Node *node) {
     if (node && node->parent) {
         
         // Find location by comparing neighbours
-        if (node->east == node->parent) {
-            return EAST;
-        } else if (node->parent == node->west) {
-            return WEST;
-        } else if (node->parent == node->south) {
-            return SOUTH;
-        } else if (node->parent == node->north) {
-            return NORTH;
-        }
+        if (node->east == node->parent) return EAST;
+        else if (node->parent == node->west) return WEST;
+        else if (node->parent == node->south) return SOUTH;
+        else if (node->parent == node->north) return NORTH;
     }
 
+    // No return value already returned, so parent not found, return 0
     return 0;
 }
 
@@ -163,14 +160,8 @@ Path_element* findShortestPath(int start_x, int start_y, int facing_direction, i
 int checkConnection(int x1, int y1, int x2, int y2) {
     // Check if both nodes exist
     if (grid[x1][y1] && grid[x2][y2] &&
-            x1 >= 0 &&
-            x1 < GRID_SIZE_X &&
-            y1 >= 0 &&
-            y1 < GRID_SIZE_Y &&
-            x2 >= 0 &&
-            x2 < GRID_SIZE_X &&
-            y2 >= 0 &&
-            y2 < GRID_SIZE_Y) {
+            // Also check if both nodes are in the gridrange
+            x1 >= 0 && x1 < GRID_SIZE_X && y1 >= 0 && y1 < GRID_SIZE_Y && x2 >= 0 && x2 < GRID_SIZE_X && y2 >= 0 && y2 < GRID_SIZE_Y) {
         // Arrange the coordinate pairs for easier checking, otherwise swap coordinates
         if (y1 == y2 && x2 - x1 == -1) {
             swap(&x1, &x2);
@@ -192,11 +183,9 @@ int checkConnection(int x1, int y1, int x2, int y2) {
                 ) {
             return 1;
         }
-    } else {
-        //printf("SHOULD ERROR!!!!!!!!!");
     }
 
-    // No return value already return, so no connection found
+    // No return value already returned, so no connection found
     return 0;
 }
 
@@ -358,7 +347,7 @@ void printGrid(Path_element* robot_path) {
                 printf("   ");
             }
             
-            // Display connection between horizontal nodes
+            // Display connection (or mine) between horizontal nodes
             if (mineAtConnection(x, y, x + 1, y)) {
                 printf(" m ");
             } else if (checkConnection(x, y, x + 1, y)) {
@@ -373,7 +362,7 @@ void printGrid(Path_element* robot_path) {
 
         // Loop through columns again
         for (x = 0; x < GRID_SIZE_X; x++) {
-            // Display vertical connection
+            // Display vertical connection (or mine)
             if (mineAtConnection(x, y, x, y - 1)) {
                 printf(" m ");
             } else if (checkConnection(x, y, x, y - 1)) {
