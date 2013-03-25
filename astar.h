@@ -68,12 +68,14 @@ void generateGrid(void);
 void printGrid(struct Path_element*);
 void processNeighbour(Node*, Node*, int, Position);
 struct Path_element* findShortestPath(int, int, int, int, int);
+struct Path* getPathDetails(int, int, int, int, int);
 void removeFromGrid(int, int);
 int checkConnection(int, int, int, int);
 int mineAtConnection(int, int, int, int);
 void removeConnection(int, int, int, int);
 void clearGridCache(void);
 int checkConnectionForMine(int, int, int, int);
+void cls(void);
 
 #endif	/* ASTAR_H */
 
