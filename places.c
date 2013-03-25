@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "places.h"
 #include "astar.h"
+#include "places.h"
 
-int places_to_visit[3][3];
+int places_to_visit[NUMBER_OF_PLACES_TO_VISIT][3];
 int no_total_path_possible = 0;
 
 /**
@@ -20,7 +20,7 @@ void getPlacesToVisit() {
     int i = 0;
 
     // Walk through all places and get which coordinates are associated with it
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < NUMBER_OF_PLACES_TO_VISIT; i++) {
 	int x, y;
 	cls();
 	printf("Please enter place %d/%d to visit (<x><space><y>):\n", (i + 1), NUMBER_OF_PLACES_TO_VISIT);
@@ -42,7 +42,7 @@ void getPlacesToVisit() {
 
 int getTargetPlace(int x, int y, int facing_direction, int debug) {
     // Initialization
-    int empty_data[] = {-1, -1, -1}, constant_data[] = {x, y, facing_direction}, max_depth, i;
+    int empty_data[NUMBER_OF_PLACES_TO_VISIT], constant_data[] = {x, y, facing_direction}, max_depth, i;
     Total_path *output = malloc(sizeof (Total_path));
     output->length = -1;
 

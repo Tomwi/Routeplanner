@@ -8,8 +8,6 @@
 #ifndef PLACES_H
 #define	PLACES_H
 
-#define NUMBER_OF_PLACES_TO_VISIT 3
-
 struct Path {
     int length;
     int facing_direction;

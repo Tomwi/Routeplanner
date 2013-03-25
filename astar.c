@@ -5,6 +5,7 @@
 #include "list.h"
 #include "path.h"
 #include "places.h"
+#include "mines.h"
 
 // Defining global variables
 Node *grid[GRID_SIZE_X][GRID_SIZE_Y];

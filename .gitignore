@@ -5,6 +5,9 @@ a-star.exe.stackdump
 nbproject/*
 routeplanner.exe.stackdump
 Makefile
+Docs
+Doxyfile
+.gitignore
 
 #################
 ## Eclipse

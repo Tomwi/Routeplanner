@@ -31,6 +31,12 @@
 #define SOUTH 3
 #define WEST 4
 
+// Number of places to visit
+#define NUMBER_OF_PLACES_TO_VISIT 3
+
+// Debug mode
+#define DEBUG 0
+
 // Macro for calculating a reversed direction, a function would be not nessecary
 #define reverseDirection(direction) (direction==NORTH||direction==SOUTH?(direction==NORTH?SOUTH:NORTH):(direction==WEST?EAST:WEST))
 
@@ -71,10 +77,8 @@ struct Path_element* findShortestPath(int, int, int, int, int);
 struct Path* getPathDetails(int, int, int, int, int);
 void removeFromGrid(int, int);
 int checkConnection(int, int, int, int);
-int mineAtConnection(int, int, int, int);
 void removeConnection(int, int, int, int);
 void clearGridCache(void);
-int checkConnectionForMine(int, int, int, int);
 void cls(void);
 
 #endif	/* ASTAR_H */
