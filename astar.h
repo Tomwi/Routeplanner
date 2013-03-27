@@ -22,6 +22,9 @@
 // Is the robot able to drive backwards?
 #define BACKWARDS_DRIVING 0
 
+// Do you want mines?
+#define MINES_ACTIVE 1
+
 // How many mines are placed in the field
 #define NUMBER_OF_MINES 13
 

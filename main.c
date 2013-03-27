@@ -78,15 +78,19 @@ int main() {
     // Initialize grid
     generateGrid();
 
+#if MINES_ACTIVE == 1 
     // Create mines
     createMines();
+#endif
 
     // Define the start position in the bottom left
     start.x = destination.x = 0;
     start.y = destination.y = 0;
-
+    
+#if MINES_ACTIVE == 1
     // Discover mines at start location
     discoverMines(start.x, start.y);
+#endif
 
     // Get first destination
     destination.x = places_to_visit[getTargetPlace(start.x, start.y, initial_facing_direction, 0)][0];
@@ -141,8 +145,10 @@ int main() {
 	// When all places are visited, break the loop
 	if (visitedAllPlaces()) break;
 
+#if MINES_ACTIVE == 1
 	// Check for mines
 	discoverMines(x, y);
+#endif
 
 	// Get destination
 	destination.x = places_to_visit[getTargetPlace(x, y, path->facing_direction, 0)][0];
@@ -170,8 +176,10 @@ int main() {
 	getchar();
     }
 
+#if MINES_ACTIVE == 1
     // Reveal mines
     revealMines();
+#endif
 
     // Display final screen
     cls();
