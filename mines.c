@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "mines.h"
 #include "astar.h"
 
 int mine_locations[NUMBER_OF_MINES][4];
