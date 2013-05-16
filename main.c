@@ -14,6 +14,7 @@
 #include "path.h"
 #include "places.h"
 #include "mines.h"
+#include "tsp.h"
 
 // Import extern variables
 extern Node *grid[GRID_SIZE_X][GRID_SIZE_Y];
@@ -48,7 +49,7 @@ void swap(int *a, int *b) {
  * @return <int> status
  */
 
-int main() {
+int main() {  
     // Initializations
     Position start, destination;
     Path_element *path, *robot_path;
@@ -60,7 +61,7 @@ int main() {
 	first_run = 0;
 
 	// Get which places to user wants to visit
-	getPlacesToVisit();
+	//getPlacesToVisit();
     }
 
     // Reset no_total_path_possible
@@ -107,6 +108,11 @@ int main() {
     for (i = 0; i < NUMBER_OF_PLACES_TO_VISIT; i++) {
 	grid[places_to_visit[i][0]][places_to_visit[i][1]]->mark = 49 + i;
     }
+    
+    // TSP Initialization
+    initializeNodes();
+    
+    /*
 
     // Find initial path
     path = findShortestPath(start.x, start.y, initial_facing_direction, destination.x, destination.y);
@@ -189,7 +195,9 @@ int main() {
 
     // Rerun program
     main();
-
+    */
+    
     return EXIT_SUCCESS;
+    
 }
 

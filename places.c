@@ -32,10 +32,10 @@ void getPlacesToVisit() {
 }
 
 /**
- * Gets the destination considering the currect location and state of the field.
+ * Gets the destination considering the current location and state of the field.
  * @param x <int> current x
  * @param y <int> current y
- * @param facing_direction <int> currect facing direction
+ * @param facing_direction <int> current facing direction
  * @param debug <int> print stack
  * @return index of places_to_visit which is also the destination
  */
@@ -80,7 +80,7 @@ int getTargetPlace(int x, int y, int facing_direction, int debug) {
 
 /**
  * Recursive algorithm to determine which total path is the most efficient.
- * Uses brute force to determine recursivly the most efficient total path.
+ * Uses brute force to determine recursively the most efficient total path.
  * @param depth <int> current depth (should be 0 in its initial call)
  * @param max_depth <int> maximum depth of the algorithm
  * @param data <int[]> stack of the places to be visited
