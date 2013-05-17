@@ -20,7 +20,7 @@
 #define STEP_WEIGHT 10
 
 // Is the robot able to drive backwards?
-#define BACKWARDS_DRIVING 0
+#define BACKWARDS_DRIVING 1
 
 // Do you want mines?
 #define MINES_ACTIVE 1
@@ -63,8 +63,8 @@ struct Node {
             *south,
             *west;
     struct Node *parent;
-    int G, H, step_weight;
-    struct Position position;
+    int G, H, step_weight, id, odd;
+    struct Position position, positionGrid;
     char mark;
 };
 

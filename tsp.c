@@ -150,31 +150,12 @@ int graphConnected() {
 }
 
 /**
- * Initialize the nodes by transforming the grid.
+ * Init
  */
-void initializeNodes() {
-	int i = 0, j;
 
-	nodes = malloc(sizeof (li) * NUMBER_OF_NODES);
-
-	// Initialize all nodes
-	for (i = 0; i < NUMBER_OF_NODES; i++) {
-		*(nodes + i) = malloc(sizeof (li));
-
-		nodes[i]->name = 42 + i;
-		nodes[i]->id = i;
-
-		nodes[i]->nbs = malloc(sizeof (li) * MAX_NBS);
-
-		nodes[i]->parents = malloc(sizeof (position)*2);
-		nodes[i]->parents[0] = malloc(sizeof (position));
-		nodes[i]->parents[1] = malloc(sizeof (position));
-
-		nodes[i]->pos = malloc(sizeof (position));
-	}
-
-	// Set correct parents (!!)
-
+void init() {
+	int i,j;
+	
 	// Upper horizontal connections
 	for (j = 0; j < 3; j++) {
 		setNbs(j, j + 1);
@@ -216,23 +197,52 @@ void initializeNodes() {
 	// Tilted sides
 	setNbs(0, 4);
 	setNbs(3, 12);
+	
+	// Vertical fuckers
+	for (i = 0; i < 4; i++) {
+		setNbs(i,5+i*2);
+	}
+	
+	for (i = 5; i <= 11; i+= 2) {
+		for (j = 0; j < 3; j++) {
+			setNbs(i+j*9,i+j*9+9);
+//			printf("Connect %d and %d\n", i+j*9, i+j*9+9);
+		}
+	}
+	
+	// Horizontal fuckers
+	for (j = 0; j < 4; j++) {
+		for (i = 4; i <= 10; i += 2) {
+			setNbs(i+j*9,i+2+j*9);
+		}
+	}
+	
+	for (i = 32; i <= 36; i += 2) {
+		setNbs(i,i+2);
+	}
+	
+	
 
 	//unNb(6, 7);
 	//	setNbs(1, 17);
 	// Randomly isolate 13 nodes -> number of mines
-	int nm = 1; //NUMBER_OF_MINES;
+	int nm = NUMBER_OF_MINES;
 	int *isolated = malloc(sizeof (int) *nm);
 
 	initCheckset();
+	
+	//printf("%d\n", numberOfCalculations(2,14));
+	getchar();
+	
 
-	printf("Graph connected check: %d\n", graphConnected());
-	clearCheckset();
+//	printf("Graph connected check: %d\n", graphConnected());
+//	clearCheckset();
 
-	printf("Graph connected check: %d\n", graphConnected());
-	clearCheckset();
+//	printf("Graph connected check: %d\n", graphConnected());
+//	clearCheckset();
 
 
-	printf("Generating random isolated nodes...\n");
+//	printf("Generating random isolated nodes...\n");
 
 	for (i = 0; i < nm; i++) {
 		int x, y;
@@ -258,18 +268,18 @@ void initializeNodes() {
 
 	}
 
-	printf("done.\n");
+//	printf("done.\n");
 
 	/*
 	 *	Create coordinates for the nodes for graphical view.
 	 */
 
-	int xspacing = 100, xmargin = 80;
+	int xspacing = 100, xmargin = 100;
 	int ymargin = 30, yspacing = 80;
 
 	for (i = 0; i < 4; i++) {
 		nodes[i]->pos->x = xmargin + xspacing*i;
-		nodes[i]->pos->y = ymargin;
+		nodes[i]->pos->y = ymargin+40;
 	}
 
 	xmargin = 50;
@@ -279,16 +289,45 @@ void initializeNodes() {
 	for (j = 0; j < 4; j++) {
 		for (i = 0; i < 9; i++) {
 			nodes[nodeindex]->pos->x = xmargin + xspacing*i;
-			nodes[nodeindex++]->pos->y = ymargin + yspacing * (j + 1);
+			nodes[nodeindex++]->pos->y = ymargin + yspacing * (j + 1) + 40 * (i%2==1);
 		}
 	}
 
-	printf("Report of graphical setup:\n");
+//	printf("Report of graphical setup:\n");
 	for (i = 0; i < NUMBER_OF_NODES; i++) {
-		printf("[%d] x: %d, y: %d \n", i, nodes[i]->pos->x, nodes[i]->pos->y);
+//		printf("[%d] x: %d, y: %d \n", i, nodes[i]->pos->x, nodes[i]->pos->y);
+	}
+}
+
+/**
+ * Initialize the nodes by transforming the grid.
+ */
+void initializeNodes() {
+	int i = 0, j;
+
+	nodes = malloc(sizeof (li) * NUMBER_OF_NODES);
+
+	// Initialize all nodes
+	for (i = 0; i < NUMBER_OF_NODES; i++) {
+		*(nodes + i) = malloc(sizeof (li));
+
+		nodes[i]->name = 42 + i;
+		nodes[i]->id = i;
+		
+		nodes[i]->isolated = 0;
+
+		nodes[i]->nbs = malloc(sizeof (li) * MAX_NBS);
+
+		nodes[i]->parents = malloc(sizeof (position)*2);
+		nodes[i]->parents[0] = malloc(sizeof (position));
+		nodes[i]->parents[1] = malloc(sizeof (position));
+
+		nodes[i]->pos = malloc(sizeof (position));
 	}
 
+	// Set correct parents (!!)
 
+	init();
 
 
 
@@ -325,7 +364,6 @@ void isolateNode(int nd) {
 	int *unsets = malloc(sizeof (int) *(nbs = getNumberOfNbs(nd)));
 
 	for (i = 0; nodes[nd]->nbs[i] != NULL; i++) {
-
 		unsets[i] = nodes[nd]->nbs[i]->id;
 	}
 
@@ -333,6 +371,8 @@ void isolateNode(int nd) {
 		printf("unset %d and %d\n", i, nd);
 		unNb(nd, unsets[i]);
 	}
+	
+	nodes[nd]->isolated = 1;
 }
 
 int getNumberOfNbs(int i) {
@@ -344,13 +384,15 @@ int getNumberOfNbs(int i) {
 }
 
 void execute() {
-	int its = 15, i;
+	/*int its = 15, i;
 
 	for (i = 0; i < its; i++) reduceComplexity();
 
 	printf("Reduce complexity algorithm with connectivity check iterations: %d\nFinal key points due to graph structure:\n", its);
 
-	stageTwo();
+	stageTwo();*/
+	
+	//smartwalkgo();
 }
 
 /**
@@ -365,7 +407,7 @@ int reduceComplexity() {
 	int *indices = malloc(sizeof (int) *NUMBER_OF_NODES);
 
 	for (i = 0; i < NUMBER_OF_NODES; i++) {
-		if (getNumberOfNbs(i) % 2 == 1) { // Voor nodes met oneven aantal
+		if (getNumberOfNbs(i)%2 == 1) { // Voor nodes met oneven aantal
 			indices[ii++] = i;
 			printf("Node %d added (%d nbs(s))\n", i, getNumberOfNbs(i));
 			changes = 1;

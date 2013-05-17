@@ -8,10 +8,10 @@
 #ifndef OPENGLFUNCS_H
 #define	OPENGLFUNCS_H
 
-void drawCircle(double,double,double);
-void drawLine(double,double,double,double);
+void drawCircle(double,double,double,int);
+void drawLine(double,double,double,double,int);
 void openWindow(void);
-void draw();
+void drawGraph();
 
 #endif	/* OPENGLFUNCS_H */
 

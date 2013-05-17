@@ -10,7 +10,7 @@
 
 #define NUMBER_OF_NODES 40
 #define MAX_PATH_LENGTH 60
-#define MAX_NBS 5
+#define MAX_NBS 10
 
 typedef struct position {
     int x, y;
@@ -22,6 +22,7 @@ typedef struct li {
     struct li **nbs;
 	struct position *pos;
 	int id;
+	int isolated;
 } li;
 
 typedef struct si {
@@ -37,7 +38,9 @@ void isolateNode(int);
 
 // Reduce complexity algorithm
 li** getVictims(int);
-int reduceComplexity(void);
+int reduceComplexity();
+
+void init(void);
 
 void stageTwo(void);
 
